@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import BarraTitulo from './Componentes/BarraTitulo'
-import Highcharts from 'highcharts'
 import moment from 'moment'
+import Grafica from './Componentes/Grafica'
+import Tabla from './Componentes/Tabla';
 
 moment.locale('es')
 class App extends Component {
@@ -12,31 +13,8 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.initGraphic()
-  }
-  initGraphic = () => {
-    Highcharts.chart('grafico', {
-      title: {
-        text: "Mi Registro de peso"
-      },
-      xAxis: {
-        type: "datetime"
-      },
-      series: [{
-        name: "test",
-        data: this.state.registros
-      }]
-    })
   }
 
-  renderFila = (registro) => {
-    return (
-      <tr key={registro[0]}>
-        <td>{moment(registro[0]).format('LLLL')}</td>
-        <td>{registro[1]}</td>
-      </tr>
-    )
-  }
   render() {
     return (
       <div className="App">
@@ -48,24 +26,10 @@ class App extends Component {
           <div className="row">
 
             <div className="col s6">
-              <div id="grafico" className="z-deph-2 hoverable"></div>
+              <Grafica registros={this.state.registros} />
             </div>
             <div className="col s6">
-              <table className="z-deph-2 hoverable">
-                <thead>
-                  <tr>
-                    <th>Fecha</th>
-                    <th>Peso (Lbs)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {
-                    this.state.registros.map(registro => (
-                      this.renderFila(registro)
-                    ))
-                  }
-                </tbody>
-              </table>
+              <Tabla registros={this.state.registros} />
             </div>
 
           </div>
