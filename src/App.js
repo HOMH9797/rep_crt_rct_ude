@@ -19,6 +19,10 @@ class App extends Component {
       registros: [...this.state.registros, nuevoRegistro]
     })
   }
+  aceptarRegistro = ({ fecha, peso }) => {
+    console.log(fecha ,peso )
+    
+  }
 
   render() {
     const btnAdd = {
@@ -29,7 +33,7 @@ class App extends Component {
 
     return (
       <div className="App">
-        <Form />
+        <Form onRegistro={this.aceptarRegistro} />
         <BarraTitulo />
         <main>
           <div className="valign-wrapper">
