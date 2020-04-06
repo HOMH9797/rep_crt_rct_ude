@@ -8,10 +8,17 @@ import Form from './Componentes/Form'
 moment.locale('es')
 class App extends Component {
   state = {
-    registros: []
+    registros: [],
+    modal: false
   }
 
   componentDidMount() {
+    if (localStorage.getItem('registros')) {
+      const registros = JSON.parse(localStorage.getItem('registros'))
+      this.setState({
+        registros
+      })
+    }
   }
   onCrearRegistro = () => {
     const nuevoRegistro = [+moment(), Math.random() * 200]
@@ -20,8 +27,21 @@ class App extends Component {
     })
   }
   aceptarRegistro = ({ fecha, peso }) => {
-    console.log(fecha ,peso )
-    
+    console.log(fecha, peso)
+    const nuevoregistro = [+fecha, +peso]
+    const newstateregistros = [...this.state.registros, nuevoregistro]
+    localStorage.setItem('registros', JSON.stringify(newstateregistros))
+    this.setState((prevState, props) => ({
+      registros: [...prevState.registros, nuevoregistro]
+    }))
+  }
+  onCerrarForm = () => {
+    this.setState({
+      modal: false
+    })
+  }
+  reiniciarRegistros = ()=>{
+    localStorage.clear()
   }
 
   render() {
@@ -33,8 +53,8 @@ class App extends Component {
 
     return (
       <div className="App">
-        <Form onRegistro={this.aceptarRegistro} />
         <BarraTitulo />
+        <Form visible={this.state.modal} onRegistro={this.aceptarRegistro} onCerrar={this.onCerrarForm} />
         <main>
           <div className="valign-wrapper">
             <h2>Registro diario</h2>
@@ -42,6 +62,7 @@ class App extends Component {
           <div className="row">
             <div className="col l6 m12 s12">
               <Grafica registros={this.state.registros} />
+              <a className="btn" onClick={this.reiniciarRegistros}>Recetear</a>
             </div>
             <div className="col l6 m12 s12">
               <Tabla registros={this.state.registros} />
@@ -50,7 +71,7 @@ class App extends Component {
         </main>
         <a className="btn-floating btn-large waves-effect waves-light red"
           style={btnAdd}
-          onClick={this.onCrearRegistro}>
+          onClick={() => this.setState({ modal: true })}>
           <i className="material-icons">add</i>
         </a>
       </div>

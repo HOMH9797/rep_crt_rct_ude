@@ -16,7 +16,7 @@ export default class Form extends React.Component {
         // const fecha = evt.target.fecha.value
         const { peso } = this.state
         console.log(fecha, peso, 'Componente Formulario')
-        if (!peso || peso < 0) {
+        if (!peso || peso < 0 || isNaN(peso)) {
             swal('Lectura invalida', 'El registro de peso debe ser valido', 'error')
         } else {
             this.props.onRegistro(this.state)
@@ -31,8 +31,8 @@ export default class Form extends React.Component {
     render() {
         return (
             <div className="row">
-                <div className="form-container col s4 offset-s4 z-depth-4 cyan lighten-3">
-                    <form >
+                <div className={`form-container scale-transition scale-out ${this.props.visible ? "scale-in" : ""} col s4 offset-s4 z-depth-4 cyan lighten-3`}>
+                    <form  className={`col s6 offset-s4`}>
                         <label htmlFor="fecha">
                             Fecha:
                             <DatePicker
@@ -40,7 +40,8 @@ export default class Form extends React.Component {
                                 onChange={this.cambioFecha}
                             />
                         </label>
-                        <label htmlFor="peso">
+
+                        <label htmlFor="peso" >
                             Peso:
                             <input
                                 id="peso"
@@ -50,11 +51,11 @@ export default class Form extends React.Component {
                                 type="text"
                             />
                         </label>
-                        <input type="button" onClick={this.onSubmit} value="Agregar"></input>
-                        <input type="button" value="Cerrar"></input>
+                        <input type="button" className="btn" onClick={this.onSubmit} value="Agregar"></input>
+                        <input type="button" className="btn" onClick={() => this.props.onCerrar()} value="Cerrar"></input>
                     </form>
                 </div>
-            </div>
+            </div >
         )
     }
 }
